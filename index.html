@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
-<script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+<!-- <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
 <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-<script src="https://rawgit.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
+<script src="https://rawgit.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script> -->
 
-<body style="margin : 0px; overflow: hidden;">
-  <a-scene embedded arjs>
+<!-- <body style="margin : 0px; overflow: hidden;">
+  <a-scene embedded arjs vr-mode-ui="enabled: false">
     <a-marker preset="custom" type="pattern" url="./assets/pattern.patt" id="marker">
       <a-entity id="animatedModel" position="0 0 0" scale="11 11 11" gltf-model="./assets/modal.glb"
         animation-mixer></a-entity>
@@ -17,10 +17,9 @@
   document.addEventListener("DOMContentLoaded", () => {
     const marker = document.querySelector("#marker");
     const model = document.querySelector("#animatedModel");
+    let animationMixer = model.components["animation-mixer"];
 
     marker.addEventListener("markerFound", () => {
-      console.log("Marker Found");
-      let animationMixer = model.components["animation-mixer"];
       if (animationMixer) {
         animationMixer.stopAction();
         animationMixer.playAction();
@@ -28,13 +27,74 @@
     });
 
     marker.addEventListener("markerLost", () => {
-      console.log("Marker Lost");
-      let animationMixer = model.components["animation-mixer"];
       if (animationMixer) {
         animationMixer.stopAction();
       }
     });
   });
-</script>
+</script> -->
+
+<!-- import aframe and then ar.js with image tracking / location based features -->
+<script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@1c2407b26c61958baa93967b5412487cd94b290b/dist/aframe-master.min.js"></script>
+<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+
+<!-- style for the loader -->
+<style>
+  .arjs-loader {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .arjs-loader div {
+    text-align: center;
+    font-size: 1.25em;
+    color: white;
+  }
+</style>
+
+<body style="margin : 0px; overflow: hidden;">
+  <!-- minimal loader shown until image descriptors are loaded. Loading may take a while according to the device computational power -->
+  <div class="arjs-loader">
+    <div>Loading, please wait...</div>
+  </div>
+
+  <!-- a-frame scene -->
+  <a-scene
+    vr-mode-ui="enabled: false;"
+    renderer="logarithmicDepthBuffer: true;"
+    embedded
+    arjs="trackingMethod: best; sourceType: webcam;debugUIEnabled: false;"
+  >
+    <!-- a-nft is the anchor that defines an Image Tracking entity -->
+    <!-- on 'url' use the path to the Image Descriptors created before. -->
+    <!-- the path should end with the name without the extension e.g. if file is 'pinball.fset' the path should end with 'pinball' -->
+    <a-nft
+      type="nft"
+      url="./assets/patternImage.iset"
+      smooth="true"
+      smoothCount="10"
+      smoothTolerance=".01"
+      smoothThreshold="5"
+    >
+      <!-- as a child of the a-nft entity, you can define the content to show. here's a GLTF model entity -->
+      <a-entity
+        gltf-model="./assets/modal.glb"
+        scale="5 5 5"
+        position="50 150 0"
+      >
+      </a-entity>
+    </a-nft>
+    <!-- static camera that moves according to the device movemenents -->
+    <a-entity camera></a-entity>
+  </a-scene>
+</body>
 
 </html>
