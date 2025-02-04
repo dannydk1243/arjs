@@ -79,9 +79,14 @@
         }, 500);
       }
     }
+    var audio = new Audio('./assets/bg.mp3');
+    audio.loop = false;
 
   exampleTarget.addEventListener("targetFound", () => {
     console.log("Target found");
+    audio.currentTime = 0;
+    audio.play();
+
     animatedModel.removeAttribute("animation-mixer");
     setTimeout(() => {
       animatedModel.setAttribute("animation-mixer", "clip: *; loop: once; timeScale: 1");
@@ -91,6 +96,9 @@
 
   exampleTarget.addEventListener("targetLost", () => {
     console.log("Target lost");
+    audio.pause();
+    audio.currentTime = 0;
+
     animatedModel.setAttribute("visible", "false");
     animatedModel.removeAttribute("animation-mixer");
     setTimeout(() => {
