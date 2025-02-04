@@ -9,10 +9,10 @@
 
 <body>
   <div id="loading-screen">
+    <div id="loading-text"></div>
     <div id="progress-container">
       <div id="progress-bar"></div>
     </div>
-    <div id="loading-text"></div>
   </div>
 
   <a-scene
@@ -137,9 +137,13 @@
 
   /* Loading Text */
   #loading-text {
+    background: url('/assets/logo.svg');
     color: white;
     margin-top: 10px;
     font-size: 18px;
+    width: 66px;
+    height: 75px;
+    background-repeat: no-repeat;
   }
 </style>
 
